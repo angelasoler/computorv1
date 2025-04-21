@@ -1,66 +1,32 @@
 use std::env;
 
-#[derive(Debug)]
-struct Term {
-    coefficient: f64,
-    exponent: i32,
-}
+// #[derive(Debug)]
+// struct Term {
+//     coefficient: f64,
+//     exponent: u8,
+// }
 
-fn parse_term(term: &str) -> Result<Term, String> {
-    // Remove any whitespace
-    let term = term.trim();
-    
-    // Split by 'x^'
-    let parts: Vec<&str> = term.split("x^").collect();
-    if parts.len() != 2 {
-        return Err(format!("Invalid term format: {}", term));
-    }
+// fn reduce_form(expr: &str) -> Result<Vec<Term>, String> {
+fn reduce_form(expr: &str) {
+    // let mut terms = Vec::new();
+    let parts: Vec<&str> = expr.split(|c| c == '=').collect();
 
-    // Parse coefficient
-    let coefficient = parts[0]
-        .trim()
-        .parse::<f64>()
-        .map_err(|_| format!("Invalid coefficient: {}", parts[0]))?;
-
-    // Parse exponent
-    let exponent = parts[1]
-        .trim()
-        .parse::<i32>()
-        .map_err(|_| format!("Invalid exponent: {}", parts[1]))?;
-
-    Ok(Term {
-        coefficient,
-        exponent,
-    })
-}
-
-fn validate_expression(expr: &str) -> Result<Vec<Term>, String> {
-    let mut terms = Vec::new();
-    let mut last_exponent = i32::MIN;
-
-    // Split by operators (+ or -)
-    let parts: Vec<&str> = expr.split(|c| c == '+' || c == '-').collect();
-    
+    // if parts.len() != 2 {
+    //     return Err(format!(
+    //         "Expression must contain exactly one '='"
+    //     ));
+    // }
     for part in parts.iter() {
-        if part.trim().is_empty() {
-            continue;
-        }
-
-        let term = parse_term(part)?;
-        
-        // Check ascending order of exponents
-        if term.exponent <= last_exponent {
-            return Err(format!(
-                "Exponents must be in ascending order. Found {} after {}",
-                term.exponent, last_exponent
-            ));
-        }
-        
-        last_exponent = term.exponent;
-        terms.push(term);
+        let parts2: Vec<&str> = part.replace(" ", "");
     }
+    println!("{:?}", parts);
 
-    Ok(terms)
+    // let mut eq: Vec<&str> = parts[0].split("*x^").collect();
+    // parts[1] = &parts[1].replace(" ", "")
+    // eq.extend(parts[1].split(' '));
+    
+
+    // Ok(terms)
 }
 
 fn main() {
@@ -68,19 +34,12 @@ fn main() {
     
     if args.len() != 2 {
         println!("Usage: {} \"expression\"", args[0]);
-        println!("Example: {} \"2x^1 + 3x^2\"", args[0]);
+        println!("Example: {} \"2 * x^1 + 3 * x^2\"", args[0]);
         return;
     }
 
-    match validate_expression(&args[1]) {
-        Ok(terms) => {
-            println!("Valid expression! Parsed terms:");
-            for term in terms {
-                println!("Coefficient: {}, Exponent: {}", term.coefficient, term.exponent);
-            }
-        }
-        Err(e) => {
-            println!("Invalid expression: {}", e);
-        }
-    }
+    // let terms: Vec<Term> = reduce_form(&args[1]).unwrap();
+    reduce_form(&args[1]);
+    // polinomial_degree(terms).unwrap();
+    // solution(terms).unwrap();
 }
