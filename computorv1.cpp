@@ -79,25 +79,66 @@ vector<float>	reduce_form(string &expression) {
 	return bigger;
 }
 
+
+
+float sqrt(float number) {
+	// https://www.cuemath.com/algebra/squares-and-square-roots/
+	return number;
+}
+
+vector<string> quadratic_equation(vector<float> coeffs) {
+	int a, b, c, discriminant;
+	vector<string> result;
+
+	a = coeffs[2];
+	b = coeffs[1];
+	c = coeffs[0];
+	discriminant = b * b - 4 * a * c;
+	float r1 = -(b/2*a);
+	if (discriminant > 0){
+		float aux = - b + sqrt(discriminant) / 2 * a;
+		result.push_back(to_string(aux));
+		aux = - b - sqrt(discriminant) / 2 * a;
+		result.push_back(to_string(aux));
+	}
+	else if (discriminant < 0) {
+		float r2 = sqrt(discriminant) / 2*a;
+		result.push_back(to_string(r1) + " + i" + to_string(r2));
+		result.push_back(to_string(r1) + " - i" + to_string(r2));
+	}
+	else {
+		result.push_back(to_string(r1 * -1));
+		result.push_back(to_string(r1 * -1));
+	}
+
+	cout << result.at(0) << endl;
+	cout << result.at(1) << endl;
+	return result;
+}
+
 //to-do: apply second degree equation
 // test all possible polinomial solution cases and validations (gtest)
-float solution(vector<float> coeffs) {
-	float	result = 0;
+void solution(vector<float> coeffs) {
+	string	result[2];
 	size_t	degree = coeffs.size() - 1;
+	float aux;
 
 	if (degree)
 		cout << "Polynomial degree: " << degree << endl;
+	cout << "The solution is:" << endl;
 	switch (degree)
 	{
 		case 1:
-			result = (coeffs[0] * -1) / coeffs[1];
+			aux = (coeffs[0] * -1) / coeffs[1];
+			result[0] = to_string(aux);
+			cout << result[0] << endl;
+			break;
+		case 2:
+			quadratic_equation(coeffs);
 			break;
 		default:
-		break;
+			break;
 	}
-	cout << "The solution is:" << endl;
-	cout << result << endl;
-	return result;
 }
 
 int main(int argc, char* argv[]) {
