@@ -83,7 +83,14 @@ vector<float>	reduce_form(string &expression) {
 
 float sqrt(float number) {
 	// https://www.cuemath.com/algebra/squares-and-square-roots/
-	return number;
+	float result = number < 0 ? -number : number; // Take the absolute value
+	float guess = result / 2.0f; // Initial guess
+	float epsilon = 0.00001f; // Precision threshold
+
+	while ((guess * guess - result) > epsilon || (result - guess * guess) > epsilon) {
+		guess = (guess + result / guess) / 2.0f; // Newton's method
+	}
+	return guess;
 }
 
 vector<string> quadratic_equation(vector<float> coeffs) {
@@ -110,10 +117,17 @@ vector<string> quadratic_equation(vector<float> coeffs) {
 		result.push_back(to_string(r1 * -1));
 		result.push_back(to_string(r1 * -1));
 	}
-
+	cout << "The solution is:" << endl;
 	cout << result.at(0) << endl;
 	cout << result.at(1) << endl;
 	return result;
+}
+
+void resolve_equation(vector<float> coeffs) {
+	if (coeffs[0] != 0)
+		cout << "No solution" << endl;
+	else
+		cout << "Any real number is a solution" << endl;
 }
 
 //to-do: apply second degree equation
@@ -125,9 +139,11 @@ void solution(vector<float> coeffs) {
 
 	if (degree)
 		cout << "Polynomial degree: " << degree << endl;
-	cout << "The solution is:" << endl;
 	switch (degree)
 	{
+		case 0:
+			resolve_aquation(coeffs);
+			break;
 		case 1:
 			aux = (coeffs[0] * -1) / coeffs[1];
 			result[0] = to_string(aux);
