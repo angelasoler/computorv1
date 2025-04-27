@@ -10,12 +10,14 @@
 using namespace std;
 
 vector<float>	DetachTerms(string expr, int mult);
-vector<string> ParseExpressions(string expr);
+vector<string>	ParseExpressions(string expr);
 vector<float>	ReduceForm(string &expression);
-vector<string>	QuadraticEquation(vector<float> coeffs);
+
 string	FormatFloat(float num);
 float	Sqrt(float number);
 void	ResolveEquation(vector<float> coeffs);
 void	Solution(vector<float> coeffs);
+
+auto	QuadraticEquation(vector<float> coeffs);
 
 #endif //COMPUTORV1_HPP

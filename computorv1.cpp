@@ -1,5 +1,7 @@
 #include "computorv1.hpp"
 
+//to-do
+//remove coefficietn [1] if it is 0 (in this case, second degree equation is really first degree)
 vector<float>	DetachTerms(string expr, int mult) {
 	vector<float>	coefficient;
 	regex delim(R"(\s*\*\s*X\^)");
@@ -47,9 +49,7 @@ string FormatFloat(float num) {
 	return(format_number);
 }
 
-// to-do: use stringstream and print all at the end
-// left presission(1)
-// validate that exponents are organized
+// presission(1)
 vector<float>	ReduceForm(string &expression) {
 	vector<string> parts = ParseExpressions(expression);
 	if (parts.size() != 2)
@@ -77,74 +77,74 @@ vector<float>	ReduceForm(string &expression) {
 
 float Sqrt(float number) {
 	// https://www.cuemath.com/algebra/squares-and-square-roots/
-	float result = number < 0 ? -number : number; // Take the absolute value
-	float guess = result / 2.0f; // Initial guess
-	float epsilon = 0.00001f; // Precision threshold
+	float guess = number / 2.0f;
+	float epsilon = 0.01f;
 
-	while ((guess * guess - result) > epsilon || (result - guess * guess) > epsilon) {
-		guess = (guess + result / guess) / 2.0f; // Newton's method
-	}
+	while ((guess * guess - number) > epsilon)
+		guess = (guess + number / guess) / 2.0f;
 	return guess;
 }
 
-vector<string> QuadraticEquation(vector<float> coeffs) {
-	int a, b, c, discriminant;
-	vector<string> result;
+auto QuadraticEquation(vector<float> coeffs) {
+	float	a, b, c, discriminant;
+	auto	result = make_shared<vector<string>>();
 
 	a = coeffs[2];
 	b = coeffs[1];
 	c = coeffs[0];
-	discriminant = b * b - 4 * a * c;
+	discriminant = b * b - (4 * a * c);
 	float r1 = -(b/2*a);
 	if (discriminant > 0){
-		float aux = - b + Sqrt(discriminant) / 2 * a;
-		result.push_back(to_string(aux));
-		aux = - b - Sqrt(discriminant) / 2 * a;
-		result.push_back(to_string(aux));
+		float sqrt_discriminant = Sqrt(discriminant);
+		float aux = (- b + sqrt_discriminant) / (2 * a);
+		result->push_back(to_string(aux));
+		aux = (- b - sqrt_discriminant) / (2 * a);
+		result->push_back(to_string(aux));
 	}
 	else if (discriminant < 0) {
-		float r2 = Sqrt(discriminant) / 2*a;
-		result.push_back(to_string(r1) + " + i" + to_string(r2));
-		result.push_back(to_string(r1) + " - i" + to_string(r2));
+		float r2 = Sqrt(abs(discriminant)) / 2*a;
+		result->push_back(to_string(r1) + " + i" + to_string(r2));
+		result->push_back(to_string(r1) + " - i" + to_string(r2));
 	}
 	else {
-		result.push_back(to_string(r1 * -1));
-		result.push_back(to_string(r1 * -1));
+		result->push_back(to_string(r1 * -1));
+		result->push_back(to_string(r1 * -1));
 	}
-	cout << "The Solution is:" << endl;
-	cout << result.at(0) << endl;
-	cout << result.at(1) << endl;
 	return result;
 }
 
-void ResolveEquation(vector<float> coeffs) {
+void ZeroDegreeSolution(vector<float> coeffs) {
 	if (coeffs[0] != 0)
 		cout << "No Solution" << endl;
 	else
 		cout << "Any real number is a Solution" << endl;
 }
 
+float FirstDegreeSolution(vector<float> coeffs) {
+	return (coeffs[0] * -1) / coeffs[1];
+}
+
 //to-do: apply second degree equation
 // test all possible polinomial Solution cases and validations (gtest)
 void Solution(vector<float> coeffs) {
-	string	result[2];
+	shared_ptr<vector<string>>	result;
 	size_t	degree = coeffs.size() - 1;
-	float aux;
 
 	if (degree)
 		cout << "Polynomial degree: " << degree << endl;
 	switch (degree)
 	{
 		case 0:
-			ResolveEquation(coeffs);
+			ZeroDegreeSolution(coeffs);
 			break;
 		case 1:
-			aux = (coeffs[0] * -1) / coeffs[1];
-			result[0] = to_string(aux);
-			cout << result[0] << endl;
+			cout << "The Solution is:" << endl;
+			cout << to_string(FirstDegreeSolution(coeffs)) << endl;
 			break;
 		case 2:
-			QuadraticEquation(coeffs);
+			result = QuadraticEquation(coeffs);
+			cout << result->at(0) << endl;
+			cout << result->at(1) << endl;
 			break;
 		default:
 			break;

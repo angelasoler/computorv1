@@ -9,6 +9,7 @@ TEST(ReduceFormTests, ProvidedExpressions) {
     // Test case 1
     std::string expression1 = "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0";
     std::vector<float> result1 = ReduceForm(expression1);
+    float solution = 
     ASSERT_EQ(result1.size(), 3);
     EXPECT_FLOAT_EQ(result1[0], 4.0);
     EXPECT_FLOAT_EQ(result1[1], 4.0);
