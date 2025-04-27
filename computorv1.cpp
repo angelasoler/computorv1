@@ -117,7 +117,7 @@ void ZeroDegreeSolution(vector<float> coeffs) {
 		cout << "Any real number is a Solution" << endl;
 }
 
-float FirstDegreeSolution(vector<float> coeffs) {
+float LinearEquation(vector<float> coeffs) {
 	return (coeffs[0] * -1) / coeffs[1];
 }
 
@@ -133,7 +133,7 @@ void Solution(vector<float> coeffs) {
 			break;
 		case 1:
 			cout << "The Solution is:" << endl;
-			cout << to_string(FirstDegreeSolution(coeffs)) << endl;
+			cout << to_string(LinearEquation(coeffs)) << endl;
 			break;
 		case 2: {
 			ResultType result = QuadraticEquation(coeffs);
@@ -145,6 +145,7 @@ void Solution(vector<float> coeffs) {
 			break;
 		}
 		default:
+			cout << "The polynomial degree is strictly greater than 2, I can't solve." << endl;
 			break;
 	}
 }
