@@ -1,5 +1,5 @@
 #include <iostream>
-#include "computorv1.cpp"
+#include "computorv1.hpp"
 
 int main(int argc, char* argv[]) {
 	if (argc != 2) {
@@ -8,7 +8,7 @@ int main(int argc, char* argv[]) {
 	}
 	string expression = argv[1];
 	try {
-		solution(reduce_form(expression));
+		Solution(ReduceForm(expression));
 	} catch (string &e) {
 		cerr << e << endl;
 	}

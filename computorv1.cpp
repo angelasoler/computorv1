@@ -1,12 +1,6 @@
-#include <iostream>
-#include <vector>
-#include <bits/stdc++.h>
-#include <string>
-#include <regex>
+#include "computorv1.hpp"
 
-using namespace std;
-
-vector<float>	separete_terms(string expr, int mult) {
+vector<float>	DetachTerms(string expr, int mult) {
 	vector<float>	coefficient;
 	regex delim(R"(\s*\*\s*X\^)");
 
@@ -28,7 +22,7 @@ vector<float>	separete_terms(string expr, int mult) {
 	return coefficient;
 }
 
-vector<string> parse_expressions(string expr) {
+vector<string> ParseExpressions(string expr) {
 	regex delim("=");
 	vector<string> parts;
 
@@ -42,7 +36,7 @@ vector<string> parse_expressions(string expr) {
 	return parts;
 }
 
-string formatFloat(float num) {
+string FormatFloat(float num) {
 	string sign = num < 0? " - " : " + ";
 	string number;
 	if (num - int(num) == 0.0)
@@ -56,12 +50,12 @@ string formatFloat(float num) {
 // to-do: use stringstream and print all at the end
 // left presission(1)
 // validate that exponents are organized
-vector<float>	reduce_form(string &expression) {
-	vector<string> parts = parse_expressions(expression);
+vector<float>	ReduceForm(string &expression) {
+	vector<string> parts = ParseExpressions(expression);
 	if (parts.size() != 2)
 		throw "Invalid expression";
-	vector<float> coef_left = separete_terms(parts[0], 1);
-	vector<float> coef_right = separete_terms(parts[1], -1);
+	vector<float> coef_left = DetachTerms(parts[0], 1);
+	vector<float> coef_right = DetachTerms(parts[1], -1);
 	int size_left = coef_left.size();
 	int size_right =  coef_right.size();
 	vector<float> bigger = size_left >= size_right? coef_left : coef_right;
@@ -70,7 +64,7 @@ vector<float>	reduce_form(string &expression) {
 		bigger.at(i) += smaller.at(i);
 	cout << "Reduced form: ";
 	for (size_t i = 0; i < bigger.size(); i++) {
-		string number = formatFloat(bigger.at(i));
+		string number = FormatFloat(bigger.at(i));
 		if (!i && bigger.at(i) >= 0)
 			number.replace(0, 3, "");
 		cout << number << " * X^" << i;
@@ -81,7 +75,7 @@ vector<float>	reduce_form(string &expression) {
 
 
 
-float sqrt(float number) {
+float Sqrt(float number) {
 	// https://www.cuemath.com/algebra/squares-and-square-roots/
 	float result = number < 0 ? -number : number; // Take the absolute value
 	float guess = result / 2.0f; // Initial guess
@@ -93,7 +87,7 @@ float sqrt(float number) {
 	return guess;
 }
 
-vector<string> quadratic_equation(vector<float> coeffs) {
+vector<string> QuadraticEquation(vector<float> coeffs) {
 	int a, b, c, discriminant;
 	vector<string> result;
 
@@ -103,13 +97,13 @@ vector<string> quadratic_equation(vector<float> coeffs) {
 	discriminant = b * b - 4 * a * c;
 	float r1 = -(b/2*a);
 	if (discriminant > 0){
-		float aux = - b + sqrt(discriminant) / 2 * a;
+		float aux = - b + Sqrt(discriminant) / 2 * a;
 		result.push_back(to_string(aux));
-		aux = - b - sqrt(discriminant) / 2 * a;
+		aux = - b - Sqrt(discriminant) / 2 * a;
 		result.push_back(to_string(aux));
 	}
 	else if (discriminant < 0) {
-		float r2 = sqrt(discriminant) / 2*a;
+		float r2 = Sqrt(discriminant) / 2*a;
 		result.push_back(to_string(r1) + " + i" + to_string(r2));
 		result.push_back(to_string(r1) + " - i" + to_string(r2));
 	}
@@ -117,22 +111,22 @@ vector<string> quadratic_equation(vector<float> coeffs) {
 		result.push_back(to_string(r1 * -1));
 		result.push_back(to_string(r1 * -1));
 	}
-	cout << "The solution is:" << endl;
+	cout << "The Solution is:" << endl;
 	cout << result.at(0) << endl;
 	cout << result.at(1) << endl;
 	return result;
 }
 
-void resolve_equation(vector<float> coeffs) {
+void ResolveEquation(vector<float> coeffs) {
 	if (coeffs[0] != 0)
-		cout << "No solution" << endl;
+		cout << "No Solution" << endl;
 	else
-		cout << "Any real number is a solution" << endl;
+		cout << "Any real number is a Solution" << endl;
 }
 
 //to-do: apply second degree equation
-// test all possible polinomial solution cases and validations (gtest)
-void solution(vector<float> coeffs) {
+// test all possible polinomial Solution cases and validations (gtest)
+void Solution(vector<float> coeffs) {
 	string	result[2];
 	size_t	degree = coeffs.size() - 1;
 	float aux;
@@ -142,7 +136,7 @@ void solution(vector<float> coeffs) {
 	switch (degree)
 	{
 		case 0:
-			resolve_aquation(coeffs);
+			ResolveEquation(coeffs);
 			break;
 		case 1:
 			aux = (coeffs[0] * -1) / coeffs[1];
@@ -150,7 +144,7 @@ void solution(vector<float> coeffs) {
 			cout << result[0] << endl;
 			break;
 		case 2:
-			quadratic_equation(coeffs);
+			QuadraticEquation(coeffs);
 			break;
 		default:
 			break;
