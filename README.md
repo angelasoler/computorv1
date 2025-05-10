@@ -1,78 +1,82 @@
 # Computor v1
 
-A Rust program that validates and parses polynomial expressions in the form of `ax^b + cx^d`.al expressions in the form of `ax^b + cx^d`.
+A C++ program that validates and solves polynomial equations of degree less than or equal to 2 in the form of `ax^b + cx^d = ex^f + gx^h`.
 
 ## Prerequisites
 
-Before running this project, you need to have Rust and Cargo installed on your system. You can install them by following these steps:
-
-1. Install Rustup (Rust installer and version manager):
-```bash
-sudo apt install rustup
-```
-
-2. Set up the stable Rust toolchain:
-```bash
-rustup default stable
-```
+Before running this project, you need to have g++ installed on your system.
 
 ## Project Structure
 
 ```
-computor/
-├── src/
-│   └── main.rs      # The main source file
-├── Cargo.toml       # Project configuration and dependencies
-└── README.md        # This file
+computorv1/
+├── computorv1.cpp  # Implementation of the equation solver
+├── computorv1.hpp  # Header file with function declarations
+├── main.cpp        # Entry point of the program
+├── Makefile        # Build instructions
+├── test_computorv1.cpp # Unit tests using Google Test
+└── README.md       # This file
 ```
 
 ## Building and Running
 
-To build and run the project:
+To build the project:
 
 ```bash
-cargo run -- "expression" -- "expression"
+make
+```
+
+To run the program:
+
+```bash
+./computor "equation"
 ```
 
 For example:
-```bash```bash
-cargo run -- "2x^1 + 3x^2"un -- "2x^1 + 3x^2"
+```bash
+./computor "5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"
 ```
 
-To only build the project without running:To only build the project without running:
+## Testing
 
-```bash```bash
-cargo builduild
-```
+To build and run the unit tests:
 
-To check if the code compiles without producing an executable:To check if the code compiles without producing an executable:
-
-```bash```bash
-cargo check
+```bash
+make run_tests
 ```
 
 ## Features
 
-- Parses polynomial terms in the format `ax^b`.
-- Validates that the terms are in ascending order of exponents.
-- Outputs the parsed terms if the expression is valid.
+- Parses polynomial equations in the format `a * X^b + c * X^d = e * X^f + g * X^h`.
+- Reduces the equation to a normalized form.
+- Solves equations up to the second degree.
+- Handles complex solutions for second degree equations.
+- Provides unit tests using Google Test framework.
 
 ## Output
 
-When run with a valid expression, the program will output:
+For a quadratic equation with positive discriminant:
 ```
-Valid expression! Parsed terms:
-Coefficient: 2, Exponent: 1
-Coefficient: 3, Exponent: 2
-```
-
-If the expression is invalid, it will output an error message:
-```
-Invalid expression: <error message>
+Reduced form: 4 * X^0 + 4 * X^1 - 9.3 * X^2 = 0
+Polynomial degree: 2
+Discriminant is strictly positive, the two solutions are:
+0.905239
+-0.475131
 ```
 
-## Usage Example
+For a quadratic equation with negative discriminant:
+```
+Reduced form: 1 * X^0 + 2 * X^1 + 5 * X^2 = 0
+Polynomial degree: 2
+Discriminant is strictly negative, the two complex solutions are:
+-1/5 + 2i/5
+-1/5 - 2i/5
+```
 
-Run the program with a polynomial expression as an argument:
-```bash
-cargo run -- "2x^1 + 3x^2"
+For a linear equation:
+```
+Reduced form: 1 * X^0 + 4 * X^1 = 0
+Polynomial degree: 1
+The Solution is:
+-0.25
+```
