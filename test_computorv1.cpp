@@ -68,6 +68,12 @@ TEST(ReduceFormTests, ProvidedExpressions) {
     string s2 = "-1/5 - 2i/5";
     EXPECT_EQ(vec_result2->at(0), s1);
     EXPECT_EQ(vec_result2->at(1), s2);
+
+    // Test case 4
+    string expression4 = "42 * X^0 = 42 * X^0";
+    vector<float> result4 = ReduceForm(expression4);
+    ASSERT_EQ(result4.size(), 1);
+    EXPECT_FLOAT_EQ(result4[0], 0.0);
 }
 
 

@@ -1,7 +1,5 @@
 #include "computorv1.hpp"
 
-//to-do
-//remove coefficietn [1] if it is 0 (in this case, second degree equation is really first degree)
 vector<float>	DetachTerms(string expr, int mult) {
 	vector<float>	coefficient;
 	regex delim(R"(\s*\*\s*X\^)");
@@ -126,6 +124,8 @@ void Solution(vector<float> coeffs) {
 
 	if (degree)
 		cout << "Polynomial degree: " << degree << endl;
+	if (!coeffs[2])
+		degree = 1;
 	switch (degree)
 	{
 		case 0:
